@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Image Upload</title>
+</head>
+<body>
+<h1>Upload an Image</h1>
+
+<form id="form" action="/api/image" method="post" enctype="multipart/form-data">
+    <input type="file" name="file"/>
+    <button type="submit">Submit</button>
+</form>
+
+<img class="fit-picture" src="http://localhost:8080/api/image/750s_HERO_001.jpg" alt="750s_HERO_001.jpg">
+
+<script>
+    function stopDefAction(evt) {
+        evt.preventDefault();
+    }
+
+    document.getElementById('submit').addEventListener('click', stopDefAction, function () {
+        const form = document.querySelector("form");
+        const formData = new FormData(form);
+
+        fetch('http://localhost:8080/api/image/', {
+            method: 'POST',
+            headers: {'Content-type': 'multipart/form-data'},
+            body: formData,
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').textContent = 'Image uploaded successfully!';
+            })
+            .catch(error => {
+                document.getElementById('result').textContent = 'Error uploading image: ' + error;
+            });
+
+    });
+</script>
+</body>
+</html>
